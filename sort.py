@@ -20,13 +20,19 @@ def sort_blocks():
         read_me = read_me_file.read()
 
     # Separating the 'table of contents' from the contents (blocks)
-    table_of_contents = ''.join(read_me.split('- - -')[0])
-    blocks = ''.join(read_me.split('- - -')[1]).split('\n# ')
+    parts = read_me.split('- - -')
+    if len(parts) < 2:
+        return
+    table_of_contents = ''.join(parts[0])
+    blocks = ''.join(parts[1]).split('\n# ')
     for i in range(len(blocks)):
         if i == 0:
-            blocks[i] = blocks[i] + '\n'
+            if not blocks[i].endswith('\n'):
+                blocks[i] = blocks[i] + '\n'
         else:
-            blocks[i] = '# ' + blocks[i] + '\n'
+            blocks[i] = '# ' + blocks[i]
+            if not blocks[i].endswith('\n'):
+                blocks[i] = blocks[i] + '\n'
 
     # Sorting the libraries
     inner_blocks = sorted(blocks[0].split('##'))
